@@ -1,7 +1,6 @@
 package ru.geekbrains.screen;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 
@@ -9,16 +8,22 @@ import ru.geekbrains.base.BaseScreen;
 
 public class MenuScreen extends BaseScreen {
 
+    private static final float V_LEN = 0.5f;
+
     private Texture img;
     private Vector2 pos;
+    private Vector2 touch;
     private Vector2 v;
+    private Vector2 tmp;
 
     @Override
     public void show() {
         super.show();
         img = new Texture("badlogic.jpg");
-        pos = new Vector2(100, 100);
-        v = new Vector2(1, 1);
+        pos = new Vector2();
+        touch = new Vector2();
+        v = new Vector2();
+        tmp = new Vector2();
     }
 
     @Override
@@ -27,7 +32,12 @@ public class MenuScreen extends BaseScreen {
         batch.begin();
         batch.draw(img, pos.x, pos.y);
         batch.end();
-        pos.add(v);
+        tmp.set(touch);
+        if (tmp.sub(pos).len() <= v.len()) {
+            pos.set(touch);
+        } else {
+            pos.add(v);
+        }
     }
 
     @Override
@@ -37,20 +47,8 @@ public class MenuScreen extends BaseScreen {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        pos.set(screenX, Gdx.graphics.getHeight() - screenY);
-        return super.touchDown(screenX, screenY, pointer, button);
-    }
-
-    @Override
-    public boolean keyDown(int keycode) {
-        if (Input.Keys.SPACE != keycode) {
-            return super.keyDown(keycode);
-        }
-        if (v.isZero()) {
-            v.set(1, 1);
-        } else {
-            v.setZero();
-        }
-        return super.keyDown(keycode);
+        touch.set(screenX, Gdx.graphics.getHeight() - screenY);
+        v = touch.cpy().sub(pos).setLength(V_LEN);
+        return false;
     }
 }
