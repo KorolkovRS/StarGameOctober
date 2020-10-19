@@ -2,6 +2,7 @@ package ru.geekbrains.screen;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Vector2;
 
 import ru.geekbrains.base.BaseScreen;
 import ru.geekbrains.math.Rect;
@@ -38,4 +39,8 @@ public class MenuScreen extends BaseScreen {
         super.dispose();
     }
 
+    @Override
+    public boolean touchDown(Vector2 touch, int pointer, int button) {
+        return false;
+    }
 }
