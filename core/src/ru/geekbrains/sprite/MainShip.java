@@ -69,6 +69,15 @@ public class MainShip extends Ship {
         bulletSound.dispose();
     }
 
+    public boolean isBulletCollision(Rect bullet) {
+        return !(
+                bullet.getRight() < getLeft()
+                        || bullet.getLeft() > getRight()
+                        || bullet.getBottom() > pos.y
+                        || bullet.getTop() < getBottom()
+        );
+    }
+
     @Override
     public boolean touchDown(Vector2 touch, int pointer, int button) {
         if (touch.x <  worldBounds.pos.x) {

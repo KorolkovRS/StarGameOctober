@@ -42,6 +42,16 @@ public class EnemyShip extends Ship {
         setHeightProportion(settings.getHeight());
         this.hp = settings.getHp();
         this.v.set(0, START_V_Y);
+        this.reloadTimer = 0f;
+    }
+
+    public boolean isBulletCollision(Rect bullet) {
+        return !(
+                bullet.getRight() < getLeft()
+                || bullet.getLeft() > getRight()
+                || bullet.getBottom() > getTop()
+                || bullet.getTop() < pos.y
+        );
     }
 
 }

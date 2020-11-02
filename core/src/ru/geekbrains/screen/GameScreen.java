@@ -140,6 +140,7 @@ public class GameScreen extends BaseScreen {
             float minDist = mainShip.getHalfWidth() + enemyShip.getHalfWidth();
             if (enemyShip.pos.dst(mainShip.pos) < minDist) {
                 enemyShip.destroy();
+                mainShip.damage(enemyShip.getDamage());
                 return;
             }
         }
@@ -149,12 +150,18 @@ public class GameScreen extends BaseScreen {
                 continue;
             }
             if (bullet.getOwner() != mainShip) {
+                if (mainShip.isBulletCollision(bullet)) {
+                    mainShip.damage(bullet.getDamage());
+                    bullet.destroy();
+                    return;
+                }
                 continue;
             }
             for (EnemyShip enemyShip : enemyShipList) {
-                if (!bullet.isOutside(enemyShip)) {
-                    enemyShip.destroy();
+                if (enemyShip.isBulletCollision(bullet)) {
+                    enemyShip.damage(bullet.getDamage());
                     bullet.destroy();
+                    return;
                 }
             }
         }
@@ -172,9 +179,9 @@ public class GameScreen extends BaseScreen {
         for (Star star : stars) {
             star.draw(batch);
         }
-        bulletPool.drawActiveSprites(batch);
-        enemyShipPool.drawActiveSprites(batch);
         mainShip.draw(batch);
+        enemyShipPool.drawActiveSprites(batch);
+        bulletPool.drawActiveSprites(batch);
         explosionPool.drawActiveSprites(batch);
         batch.end();
     }
