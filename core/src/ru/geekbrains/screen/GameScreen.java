@@ -22,6 +22,7 @@ import ru.geekbrains.sprite.EnemyShip;
 import ru.geekbrains.sprite.MainShip;
 import ru.geekbrains.sprite.MessageGameOver;
 import ru.geekbrains.sprite.Star;
+import ru.geekbrains.sprite.TrackingStar;
 import ru.geekbrains.utils.EnemyEmitter;
 import ru.geekbrains.utils.Font;
 
@@ -44,7 +45,7 @@ public class GameScreen extends BaseScreen {
     private Sound explosionSound;
 
     private Background background;
-    private Star[] stars;
+    private TrackingStar[] stars;
     private BulletPool bulletPool;
     private EnemyShipPool enemyShipPool;
     private ExplosionPool explosionPool;
@@ -72,15 +73,17 @@ public class GameScreen extends BaseScreen {
         explosionSound = Gdx.audio.newSound(Gdx.files.internal("sounds/explosion.wav"));
 
         background = new Background(bg);
-        stars = new Star[STAR_COUNT];
-        for (int i = 0; i < STAR_COUNT; i++) {
-            stars[i] = new Star(atlas);
-        }
+
         bulletPool = new BulletPool();
         explosionPool = new ExplosionPool(atlas, explosionSound);
         enemyShipPool = new EnemyShipPool(bulletPool, explosionPool, worldBounds);
         mainShip = new MainShip(atlas, bulletPool, explosionPool);
         enemyEmitter = new EnemyEmitter(worldBounds, enemyShipPool, enemyBulletSound, atlas);
+
+        stars = new TrackingStar[STAR_COUNT];
+        for (int i = 0; i < STAR_COUNT; i++) {
+            stars[i] = new TrackingStar(atlas, mainShip.getV());
+        }
 
         messageGameOver = new MessageGameOver(atlas);
         buttonNewGame = new ButtonNewGame(atlas, this);
